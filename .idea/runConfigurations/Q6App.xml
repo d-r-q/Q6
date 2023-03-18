@@ -1,0 +1,10 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="Q6App" type="JetRunConfigurationType">
+    <option name="MAIN_CLASS_NAME" value="q6.app.Q6AppKt" />
+    <module name="Q6.main" />
+    <shortenClasspath name="NONE" />
+    <method v="2">
+      <option name="Make" enabled="true" />
+    </method>
+  </configuration>
+</component>
