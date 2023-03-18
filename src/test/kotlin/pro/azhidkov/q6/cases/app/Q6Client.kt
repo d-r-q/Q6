@@ -7,12 +7,10 @@ import org.http4k.core.Status
 import org.http4k.core.body.form
 import org.http4k.core.cookie.cookie
 import org.http4k.core.cookie.cookies
-import pro.azhidkov.q6.infra.app
 import q6.app.platform.AUTH_TOKEN_COOKIE
 
 
 class Q6Client(
-    private val app: HttpHandler,
     private val authToken: String
 ) {
 
@@ -29,7 +27,7 @@ class Q6Client(
             check(loginResponse.status == Status.FOUND) { "Login failed: $loginResponse" }
 
             val authToken = loginResponse.cookies().find { it.name == AUTH_TOKEN_COOKIE } ?: error("No auth cookie")
-            return Q6Client(app, authToken.value)
+            return Q6Client(authToken.value)
         }
     }
 }

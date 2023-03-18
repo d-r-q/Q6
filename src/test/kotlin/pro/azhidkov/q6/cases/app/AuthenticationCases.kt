@@ -3,12 +3,10 @@ package pro.azhidkov.q6.cases.app
 import io.github.ulfs.assertj.jsoup.Assertions
 import org.http4k.core.Method
 import org.http4k.core.Request
-import org.http4k.core.cookie.cookie
 import org.jsoup.Jsoup
 import org.junit.jupiter.api.Test
-import pro.azhidkov.q6.infra.app
-import pro.azhidkov.q6.infra.system
-import q6.app.platform.AUTH_TOKEN_COOKIE
+import pro.azhidkov.q6.infra.q6Core
+import pro.azhidkov.q6.infra.q6Http4kApp
 import q6.core.users.api.RegisterUserRequest
 import kotlin.test.assertEquals
 
@@ -20,7 +18,7 @@ class AuthenticationCases {
         val getLoginPageRequest = Request(Method.GET, "/login")
 
         // When
-        val response = app(getLoginPageRequest)
+        val response = q6Http4kApp(getLoginPageRequest)
 
         // Then
         assertEquals(200, response.status.code)
@@ -36,7 +34,7 @@ class AuthenticationCases {
         val getRestrictedPageRequest = Request(Method.GET, "/app/main")
 
         // When
-        val getRestrictedPageResponse = app(getRestrictedPageRequest)
+        val getRestrictedPageResponse = q6Http4kApp(getRestrictedPageRequest)
 
         // Then
         assertEquals(302, getRestrictedPageResponse.status.code)
@@ -48,12 +46,12 @@ class AuthenticationCases {
         // Given
         val asergeevLogin = "asergeev@ya.ru"
         val asergeevPass = "password"
-        system.users.usersService.registerUser(RegisterUserRequest(asergeevLogin, asergeevPass, "Алексндр Сергеев"))
-        val client = Q6Client.login(app, asergeevLogin, asergeevPass)
+        q6Core.users.usersService.registerUser(RegisterUserRequest(asergeevLogin, asergeevPass, "Алексндр Сергеев"))
+        val client = Q6Client.login(q6Http4kApp, asergeevLogin, asergeevPass)
         val getRestrictedPageRequest = client.authenticate(Request(Method.GET, "/app/main"))
 
         // When
-        val getRestrictedPageResponse = app(getRestrictedPageRequest)
+        val getRestrictedPageResponse = q6Http4kApp(getRestrictedPageRequest)
 
         // Then
         assertEquals(200, getRestrictedPageResponse.status.code)

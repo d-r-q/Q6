@@ -14,5 +14,9 @@
         <appender-ref ref="CONSOLE"/>
     </logger>
 
+    <logger name="org.junit" level="trace" additivity="false">
+        <appender-ref ref="CONSOLE"/>
+    </logger>
+
 
 </configuration>

@@ -6,7 +6,7 @@ import org.http4k.core.Request
 import org.http4k.core.body.form
 import org.jsoup.Jsoup
 import org.junit.jupiter.api.Test
-import pro.azhidkov.q6.infra.app
+import pro.azhidkov.q6.infra.q6Http4kApp
 import kotlin.test.assertEquals
 
 class RegistrationCases {
@@ -17,7 +17,7 @@ class RegistrationCases {
         val getRegisterPageRequest = Request(Method.GET, "/register")
 
         // When
-        val response = app(getRegisterPageRequest)
+        val response = q6Http4kApp(getRegisterPageRequest)
 
         // Then
         assertEquals(200, response.status.code)
@@ -39,7 +39,7 @@ class RegistrationCases {
             .form("name", "Irrelevant")
 
         // When
-        val registerResponse = app(postRegisterUserRequest)
+        val registerResponse = q6Http4kApp(postRegisterUserRequest)
 
         // Then
         assertEquals(200, registerResponse.status.code)
@@ -54,7 +54,7 @@ class RegistrationCases {
             .form("password", pass)
 
         // When
-        val loginResponse = app(postCredsRequest)
+        val loginResponse = q6Http4kApp(postCredsRequest)
 
         // Then
         assertEquals(302, loginResponse.status.code)

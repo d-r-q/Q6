@@ -6,7 +6,7 @@ import org.hamcrest.MatcherAssert.assertThat
 import org.junit.Assume.assumeNotNull
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
-import pro.azhidkov.q6.infra.system
+import pro.azhidkov.q6.infra.q6Core
 import q6.core.users.api.RegisterUserRequest
 import q6.core.users.api.Role
 import kotlin.test.assertNotNull
@@ -14,11 +14,11 @@ import kotlin.test.assertNotNull
 
 class UsersServiceTests {
 
-    private val usersService = system.users.usersService
+    private val usersService = q6Core.users.usersService
 
     @BeforeEach
     fun setup() {
-        system.dbModule.dataSource.connection.prepareStatement("TRUNCATE TABLE users CASCADE;").execute()
+        q6Core.dbModule.dataSource.connection.prepareStatement("TRUNCATE TABLE users CASCADE;").execute()
     }
 
     @Test
