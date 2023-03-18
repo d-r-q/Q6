@@ -6,11 +6,7 @@ import org.http4k.core.Status
 import org.http4k.routing.bind
 import org.http4k.routing.routes
 import org.http4k.template.TemplateRenderer
-import q6.app.anonymous.LoginPage
 import q6.app.platform.Q6ViewModel
-import q6.app.platform.location
-import q6.app.platform.userIdentity
-import q6.core.users.api.Role
 import q6.platform.web.PageController
 
 

@@ -26,14 +26,21 @@ class AppConfig(config: Map<String, String>) {
     inline operator fun <reified T : Any> get(key: String): T =
         this[key, T::class]
 
+    inline fun <reified T : Any> getOrDefault(key: String, default: T): T =
+        this.getOrDefault(key, default, T::class)
+
+    fun <T : Any> getOrDefault(key: String, default: T, type: KClass<T>): T = getOrNull(key, type) ?: default
+
+    operator fun <T : Any> get(key: String, type: KClass<T>): T = getOrNull(key, type)
+        ?: error("Value for key=$key not found")
+
     @Suppress("UNCHECKED_CAST")
-    operator fun <T : Any> get(key: String, type: KClass<T>): T = when (type) {
+    fun <T : Any> getOrNull(key: String, type: KClass<T>): T? = when (type) {
         String::class -> consolidated[key]
         Array<String>::class -> consolidated[key]?.split(",")?.map(String::trim)?.toTypedArray()
         Int::class -> consolidated[key]?.toInt()
-        else -> error("Unsupported value type: ${type}")
+        else -> error("Unsupported value type: $type")
     } as T?
-        ?: error("Value for key=$key not found")
 
 }
 

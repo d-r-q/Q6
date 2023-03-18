@@ -1,6 +1,6 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="Q6App" type="JetRunConfigurationType">
-    <option name="MAIN_CLASS_NAME" value="q6.app.Q6AppKt" />
+  <configuration default="false" name="Q6 HTTP4k App" type="JetRunConfigurationType">
+    <option name="MAIN_CLASS_NAME" value="q6.app.Q6WebAppKt" />
     <module name="Q6.main" />
     <shortenClasspath name="NONE" />
     <method v="2">

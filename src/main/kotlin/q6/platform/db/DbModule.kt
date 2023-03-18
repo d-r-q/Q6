@@ -44,7 +44,7 @@ class FlywayDbMigrator(
     fun migrateDb() {
         val flyway = Flyway.configure()
             .dataSource(dataSource)
-            .locations(*(config.get<Array<String>>("q6.db.flyway.locations") ?: emptyArray()))
+            .locations(*(config.getOrDefault<Array<String>>("q6.db.flyway.locations", emptyArray())))
             .load()
         flyway.migrate()
     }
