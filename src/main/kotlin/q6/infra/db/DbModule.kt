@@ -1,16 +1,17 @@
-package q6.platform.db
+package q6.infra.db
 
 import com.zaxxer.hikari.HikariConfig
 import com.zaxxer.hikari.HikariDataSource
-import org.flywaydb.core.Flyway
 import org.jetbrains.exposed.sql.Database
+import org.slf4j.LoggerFactory
 import q6.platform.conf.AppConfig
-import javax.sql.DataSource
 
 
 class DbModule(
     private val appConfig: AppConfig
 ) {
+
+    private val log = LoggerFactory.getLogger(javaClass)
 
     val dataSource: HikariDataSource by lazy {
         HikariConfig().let {
@@ -31,23 +32,11 @@ class DbModule(
     }
 
     fun stop() {
-        dataSource.close()
+        try {
+            dataSource.close()
+        } catch (e: Throwable) {
+            log.warn("DataSource closing failed", e)
+        }
     }
 
 }
-
-class FlywayDbMigrator(
-    private val dataSource: DataSource,
-    private val config: AppConfig
-) {
-
-    fun migrateDb() {
-        val flyway = Flyway.configure()
-            .dataSource(dataSource)
-            .locations(*(config.getOrDefault<Array<String>>("q6.db.flyway.locations", emptyArray())))
-            .load()
-        flyway.migrate()
-    }
-
-}
-

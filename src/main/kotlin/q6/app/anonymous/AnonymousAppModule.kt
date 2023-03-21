@@ -2,7 +2,7 @@ package q6.app.anonymous
 
 import q6.core.auth.AuthModule
 import q6.core.users.UsersModule
-import q6.platform.web.TemplatesModule
+import q6.infra.http4k.TemplatesModule
 import q6.platform.web.WebSubModule
 
 

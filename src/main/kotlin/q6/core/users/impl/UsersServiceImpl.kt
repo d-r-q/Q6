@@ -6,9 +6,11 @@ import org.jetbrains.exposed.sql.transactions.transaction
 import q6.core.users.api.*
 import q6.platform.auth.PasswordEncoder
 import q6.platform.exposed.enumArray
+import q6.platform.rmq.RabbitMqClient
 
 class UsersServiceImpl(
-    private val db: Database
+    private val db: Database,
+    private val rmqClient: RabbitMqClient
 ) : UsersService {
 
     init {
@@ -21,6 +23,9 @@ class UsersServiceImpl(
         val inserted = Repo.addUser(
             registerUserRequest.copy(password = PasswordEncoder.encode(registerUserRequest.password))
         )
+
+        rmqClient.send(USER_REGISTERED_EVENTS_QUEUE, UserRegisteredEvent(inserted.value.toString()))
+
         UserId(inserted.value)
     }
 

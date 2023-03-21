@@ -13,7 +13,8 @@ import q6.app.anonymous.AnonymousAppModule
 import q6.app.main.Q6AppModule
 import q6.app.platform.*
 import q6.core.users.api.Role
-import q6.platform.web.TemplatesModule
+import q6.infra.http4k.TemplatesModule
+import q6.platform.conf.AppConfig
 import java.lang.management.ManagementFactory
 import java.lang.management.RuntimeMXBean
 
@@ -78,8 +79,10 @@ class Q6AppHttp4kPort(
 }
 
 fun main() {
-    val q6Core = Q6Core()
+    val appConfig = AppConfig(emptyMap())
+    val q6Infra = Q6Infra(appConfig)
         .init()
+    val q6Core = Q6Core(appConfig, q6Infra)
     val q6Http4kPort = Q6AppHttp4kPort(q6Core)
     q6Http4kPort.startServer()
 }

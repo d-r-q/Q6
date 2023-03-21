@@ -10,6 +10,10 @@
         <appender-ref ref="CONSOLE"/>
     </root>
 
+    <logger name="q6" level="trace" additivity="false">
+        <appender-ref ref="CONSOLE"/>
+    </logger>
+
     <logger name="org.http4k" level="trace" additivity="false">
         <appender-ref ref="CONSOLE"/>
     </logger>

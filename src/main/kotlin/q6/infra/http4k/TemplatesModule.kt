@@ -1,4 +1,4 @@
-package q6.platform.web
+package q6.infra.http4k
 
 import org.http4k.template.ThymeleafTemplates
 import q6.platform.conf.AppConfig

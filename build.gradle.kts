@@ -24,6 +24,8 @@ dependencies {
 
     implementation("ch.qos.logback:logback-classic:1.3.5")
     implementation("at.favre.lib:bcrypt:0.10.2")
+    implementation("com.rabbitmq:amqp-client:5.16.0")
+    implementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.14.2")
 
     testImplementation(kotlin("test"))
     testImplementation("org.testcontainers:postgresql:1.17.4")

@@ -7,18 +7,23 @@ import org.junit.Assume.assumeNotNull
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import pro.azhidkov.q6.infra.q6Core
+import pro.azhidkov.q6.infra.q6Infra
 import q6.core.users.api.RegisterUserRequest
 import q6.core.users.api.Role
+import q6.core.users.api.USER_REGISTERED_EVENTS_QUEUE
+import q6.core.users.api.UserRegisteredEvent
+import java.util.concurrent.CompletableFuture
 import kotlin.test.assertNotNull
 
 
 class UsersServiceTests {
 
     private val usersService = q6Core.users.usersService
+    private val rmqClient = q6Infra.rmqModule.rmqClient
 
     @BeforeEach
     fun setup() {
-        q6Core.dbModule.dataSource.connection.prepareStatement("TRUNCATE TABLE users CASCADE;").execute()
+        q6Infra.dbModule.dataSource.connection.prepareStatement("TRUNCATE TABLE users CASCADE;").execute()
     }
 
     @Test
@@ -48,6 +53,27 @@ class UsersServiceTests {
         // Then
         assumeNotNull(user)
         assertThat(user?.roles).contains(Role.ROLE_USER)
+    }
+
+    @Test
+    fun `UserService should publish domain event about user registration`() {
+        // Given
+        val registerUserRequest = RegisterUserRequest("irrelevant", "irrelevant", "irrelevant")
+        rmqClient.redeclareDomainEventsQueue(USER_REGISTERED_EVENTS_QUEUE)
+
+        val messageFuture: CompletableFuture<UserRegisteredEvent?> = CompletableFuture.supplyAsync {
+            rmqClient.receive(USER_REGISTERED_EVENTS_QUEUE, UserRegisteredEvent::class)
+        }
+
+        // When
+        val userId = usersService.registerUser(registerUserRequest.copy(email = "new"))
+        usersService.registerUser(registerUserRequest)
+
+        // Then
+        messageFuture.join()
+        val message = messageFuture.get()
+        assertThat(message, notNullValue())
+        assertThat(message!!.userId, equalTo(userId.id.toString()))
     }
 
 }

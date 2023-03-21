@@ -1,6 +1,6 @@
 package q6.app.main
 
-import q6.platform.web.TemplatesModule
+import q6.infra.http4k.TemplatesModule
 import q6.platform.web.WebSubModule
 
 
