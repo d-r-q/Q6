@@ -21,10 +21,11 @@ val rabbitMqContainer: GenericContainer<*> by lazy {
         .apply { start() }
 }
 
-const val providedRmqPort = 5673
+const val providedRmqPort = 5683
 
 fun getRmqPort(): Int = if (isOpen(providedRmqPort)) providedRmqPort else rabbitMqContainer.getMappedPort(5672)
 
+@Suppress("SameParameterValue")
 private fun isOpen(port: Int): Boolean {
     try {
         Socket("localhost", port).use {
