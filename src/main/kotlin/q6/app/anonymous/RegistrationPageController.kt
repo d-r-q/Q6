@@ -33,7 +33,11 @@ class RegistrationPageController(
             val registerUserRequest =
                 RegisterUserRequest(email(registerFrom), password(registerFrom), name(registerFrom))
             usersService.registerUser(registerUserRequest)
-            Response(OK).body(renderer(StaticPage("/q6/app/anonymous/SuccessfulRegistrationPage.html")))
+            Response(OK)
+                .header("HX-Redirect", "successful-registration")
+        },
+        "/successful-registration" bind Method.GET to {
+            Response(OK).body(renderer(SuccessfulRegistrationPage))
         }
     )
 

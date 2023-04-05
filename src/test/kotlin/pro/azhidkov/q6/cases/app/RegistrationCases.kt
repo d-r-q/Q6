@@ -23,7 +23,29 @@ class RegistrationCases {
         assertEquals(200, response.status.code)
         val body = Jsoup.parse(response.bodyString())
         Assertions.assertThatSpec(body) {
-            node("#registerForm") { exists() }
+            node("#registerForm") {
+                exists()
+                attribute("hx-post") {
+                    hasText("/register")
+                }
+            }
+
+            node("input#submit") {
+                exists()
+                attribute("type") { hasText("submit") }
+            }
+        }
+    }
+
+    @Test
+    fun `Successful registration page should contains corresponding message`() {
+        // When
+        val response = q6Http4kApp(Request(Method.GET, "successful-registration"))
+
+        // Then
+        assertEquals(200, response.status.code)
+        Assertions.assertThatSpec(Jsoup.parse(response.bodyString())) {
+            node("#registrationSuccess") { exists() }
         }
     }
 
@@ -40,12 +62,8 @@ class RegistrationCases {
 
         // When
         val registerResponse = q6Http4kApp(postRegisterUserRequest)
-
-        // Then
         assertEquals(200, registerResponse.status.code)
-        Assertions.assertThatSpec(Jsoup.parse(registerResponse.bodyString())) {
-            node("#registrationSuccess") { exists() }
-        }
+        assertEquals("successful-registration", registerResponse.header("HX-Redirect"))
 
         // And when
         val postCredsRequest = Request(Method.POST, "/login")
@@ -53,10 +71,9 @@ class RegistrationCases {
             .form("email", email)
             .form("password", pass)
 
-        // When
+        // Then
         val loginResponse = q6Http4kApp(postCredsRequest)
 
-        // Then
         assertEquals(302, loginResponse.status.code)
         assertEquals("/app/main", loginResponse.header("Location"))
     }
