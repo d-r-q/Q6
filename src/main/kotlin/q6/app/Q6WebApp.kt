@@ -1,18 +1,14 @@
 package q6.app
 
-import org.http4k.core.Response
-import org.http4k.core.Status
 import org.http4k.core.then
 import org.http4k.routing.routes
 import org.http4k.server.ServerConfig
 import org.http4k.server.Undertow
 import org.http4k.server.asServer
-import org.http4k.template.renderToResponse
 import org.slf4j.LoggerFactory
 import q6.app.anonymous.AnonymousAppModule
+import q6.app.infra.auth.Q6AuthModule
 import q6.app.main.Q6AppModule
-import q6.app.platform.*
-import q6.core.users.api.Role
 import q6.infra.http4k.TemplatesModule
 import q6.platform.conf.AppConfig
 import java.lang.management.ManagementFactory
@@ -31,31 +27,11 @@ class Q6AppHttp4kPort(
     private val anonymousAppModule = AnonymousAppModule(templatesModule, q6Core.users, q6Core.auth)
     private val q6AppModule = Q6AppModule(templatesModule)
 
-    private val authRules = PathPatternAuthorizationRules(
-        "/app/.*" to setOf(Role.ROLE_USER),
-        "/.*" to emptySet()
-    )
-
-    private val authorizer = UserIdentityAuthorizer(
-        authRules,
-        {
-            templatesModule.renderer.renderToResponse(
-                StaticPage("q6/app/anonymous/ForbiddenPage.html"),
-                Status.FORBIDDEN
-            )
-        },
-        { Response(Status.FOUND).location("/login") }
-    )
-
-
-    private val filters = listOf(
-        CookieAuthenticator(q6Core.auth.authService),
-        authorizer
-    )
-
     private val webAppSubmodules = listOf(anonymousAppModule, q6AppModule)
 
-    val app = filters.reduce { l, r -> l.then(r) }
+    private val authModule = Q6AuthModule(templatesModule, q6Core)
+
+    val app = authModule.filters.reduce { l, r -> l.then(r) }
         .then(routes(*(webAppSubmodules.flatMap { it.routes }).toTypedArray()))
 
     fun startServer() {

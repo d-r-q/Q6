@@ -1,4 +1,4 @@
-package q6.app.platform
+package q6.platform.http4k
 
 import org.http4k.core.Response
 

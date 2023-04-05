@@ -1,11 +1,9 @@
-package q6.app.platform
+package q6.app.infra.auth
 
-import org.http4k.cloudnative.env.EnvironmentKey.mapWithNewMeta
 import org.http4k.core.Filter
 import org.http4k.core.HttpHandler
 import org.http4k.core.Request
 import org.http4k.core.cookie.cookie
-import org.http4k.lens.*
 import q6.core.auth.api.AuthService
 import q6.core.users.api.Role
 import q6.core.users.api.UserId

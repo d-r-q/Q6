@@ -10,10 +10,9 @@ import org.http4k.lens.webForm
 import org.http4k.routing.bind
 import org.http4k.routing.routes
 import org.http4k.template.TemplateRenderer
-import q6.app.platform.Q6ViewModel
-import q6.app.platform.StaticPage
 import q6.core.users.api.RegisterUserRequest
 import q6.core.users.api.UsersService
+import q6.platform.http4k.SameFileNameViewModel
 import q6.platform.web.PageController
 
 
@@ -31,7 +30,8 @@ class RegistrationPageController(
             val password = FormField.required("password")
             val name = FormField.required("name")
             val registerFrom = Body.webForm(Validator.Strict, email, password, name).toLens().extract(req)
-            val registerUserRequest = RegisterUserRequest(email(registerFrom), password(registerFrom), name(registerFrom))
+            val registerUserRequest =
+                RegisterUserRequest(email(registerFrom), password(registerFrom), name(registerFrom))
             usersService.registerUser(registerUserRequest)
             Response(OK).body(renderer(StaticPage("/q6/app/anonymous/SuccessfulRegistrationPage.html")))
         }
@@ -41,4 +41,6 @@ class RegistrationPageController(
 
 data class RegistrationPage(
     val registerUserRequest: RegisterUserRequest = RegisterUserRequest("", "", "")
-) : Q6ViewModel
+) : SameFileNameViewModel
+
+object SuccessfulRegistrationPage : SameFileNameViewModel

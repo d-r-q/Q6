@@ -1,6 +1,9 @@
-package q6.app.platform
+package q6.app.infra.auth
 
-import org.http4k.core.*
+import org.http4k.core.Filter
+import org.http4k.core.HttpHandler
+import org.http4k.core.Request
+import org.http4k.core.Response
 
 
 class UserIdentityAuthorizer(

@@ -6,7 +6,7 @@ import org.http4k.core.Status
 import org.http4k.routing.bind
 import org.http4k.routing.routes
 import org.http4k.template.TemplateRenderer
-import q6.app.platform.Q6ViewModel
+import q6.platform.http4k.SameFileNameViewModel
 import q6.platform.web.PageController
 
 
@@ -22,4 +22,4 @@ class MainPageController(
 
 }
 
-class MainPage : Q6ViewModel
+class MainPage : SameFileNameViewModel

@@ -7,7 +7,7 @@ import org.http4k.core.Status
 import org.http4k.core.body.form
 import org.http4k.core.cookie.cookie
 import org.http4k.core.cookie.cookies
-import q6.app.platform.AUTH_TOKEN_COOKIE
+import q6.app.infra.auth.AUTH_TOKEN_COOKIE
 
 
 class Q6Client(

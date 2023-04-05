@@ -14,12 +14,11 @@ import org.http4k.lens.webForm
 import org.http4k.routing.bind
 import org.http4k.routing.routes
 import org.http4k.template.TemplateRenderer
-import q6.app.platform.AUTH_TOKEN_COOKIE
-import q6.app.platform.CookieAuthenticator
-import q6.app.platform.Q6ViewModel
-import q6.app.platform.location
+import q6.app.infra.auth.AUTH_TOKEN_COOKIE
 import q6.core.auth.api.AuthService
 import q6.core.auth.api.LoginRequest
+import q6.platform.http4k.SameFileNameViewModel
+import q6.platform.http4k.location
 import q6.platform.web.PageController
 import kotlin.time.Duration.Companion.minutes
 
@@ -59,4 +58,4 @@ class LoginPageController(
 }
 
 
-object LoginPage : Q6ViewModel
+object LoginPage : SameFileNameViewModel

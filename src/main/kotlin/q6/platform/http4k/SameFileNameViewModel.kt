@@ -1,8 +1,8 @@
-package q6.app.platform
+package q6.platform.http4k
 
 import org.http4k.template.ViewModel
 
-interface Q6ViewModel : ViewModel {
+interface SameFileNameViewModel : ViewModel {
 
     override fun template(): String {
         val path = this::class.qualifiedName?.replace(".", "/") ?: error("Cannot get page name from ${this::class}")

@@ -1,4 +1,4 @@
-package q6.app.platform
+package q6.app.infra.auth
 
 import org.http4k.core.Request
 import q6.core.users.api.Role
