@@ -4,9 +4,18 @@ import org.http4k.template.ViewModel
 
 interface SameFileNameViewModel : ViewModel {
 
+    val selector: String?
+        get() = null
+
     override fun template(): String {
-        val path = this::class.qualifiedName?.replace(".", "/") ?: error("Cannot get page name from ${this::class}")
-        return "$path.html"
+        val template = this::class.qualifiedName?.replace(".", "/") ?: error("Cannot get page name from ${this::class}")
+        return buildString {
+            append(template)
+            if (selector != null) {
+                append(" :: ")
+                append(selector)
+            }
+        }
     }
 
 }
