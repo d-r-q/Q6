@@ -6,6 +6,7 @@ import org.hamcrest.MatcherAssert.assertThat
 import org.junit.Assume.assumeNotNull
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import pro.azhidkov.q6.infra.cleanDb
 import pro.azhidkov.q6.infra.q6Core
 import pro.azhidkov.q6.infra.q6Infra
 import q6.core.users.api.RegisterUserRequest
@@ -23,7 +24,7 @@ class UsersServiceTests {
 
     @BeforeEach
     fun setup() {
-        q6Infra.dbModule.dataSource.connection.prepareStatement("TRUNCATE TABLE users CASCADE;").execute()
+        q6Infra.dbModule.cleanDb()
     }
 
     @Test

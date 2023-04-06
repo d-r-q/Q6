@@ -1,6 +1,7 @@
 package pro.azhidkov.q6.infra
 
 import org.slf4j.LoggerFactory
+import q6.infra.db.DbModule
 import java.sql.DriverManager
 import java.sql.SQLException
 
@@ -12,7 +13,7 @@ private val log = LoggerFactory.getLogger(TestDb::class.java)
 
 fun getJdbcUrl(): String {
     try {
-        val con = DriverManager.getConnection(providedDbUrl.replace("q6", "postgres"), "q6", "password");
+        val con = DriverManager.getConnection(providedDbUrl.replace("q6", "postgres"), "q6", "password")
         log.info("Provided db found, recreating it")
         con.prepareStatement(
             """
@@ -28,4 +29,8 @@ fun getJdbcUrl(): String {
     }
 
     return pgContainer.jdbcUrl
+}
+
+fun DbModule.cleanDb() {
+    dataSource.connection.prepareStatement("TRUNCATE TABLE users CASCADE;").execute()
 }

@@ -32,7 +32,7 @@ class PathPatternAuthorizationRules(vararg rules: Pair<String, Set<Role>>) : Aut
             return AuthorizationResult.NOT_AUTHENTICATED
         }
 
-        return if ((userRoles.isEmpty() && requiredRoles.isEmpty()) || userRoles.intersect(requiredRoles).isNotEmpty()) {
+        return if (requiredRoles.isEmpty() || userRoles.intersect(requiredRoles).isNotEmpty()) {
             AuthorizationResult.AUTHORIZED
         } else {
             AuthorizationResult.NOT_AUTHORIZED
