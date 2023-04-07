@@ -4,22 +4,21 @@ import org.http4k.core.Filter
 import org.http4k.core.HttpHandler
 import org.http4k.core.Request
 import org.http4k.core.cookie.cookie
-import q6.core.auth.api.AuthService
 import q6.core.users.api.Role
 import q6.core.users.api.UserId
 import q6.core.users.api.UserIdentity
 
 const val AUTH_TOKEN_COOKIE = "AUTH_TOKEN"
-private const val USER_IDENTITY_QUERY_PARAM = "q6.app.platform.user_identity"
+private const val USER_IDENTITY_QUERY_PARAM = "pro.azhidkov.platform.user_identity"
 
 class CookieAuthenticator(
-    private val authService: AuthService
+    private val exchange: (String) -> UserIdentity?
 ) : Filter {
 
     override fun invoke(next: HttpHandler): HttpHandler = { req ->
         val authToken = req.cookie(AUTH_TOKEN_COOKIE)?.value
         val authenticatedReq = if (authToken != null) {
-            val userIdentity = authService.exchange(authToken)
+            val userIdentity = exchange(authToken)
             if (userIdentity != null) {
                 req.authenticate(userIdentity)
             } else {
@@ -36,7 +35,6 @@ private fun Request.authenticate(userIdentity: UserIdentity): Request = this.que
     USER_IDENTITY_QUERY_PARAM,
     "${userIdentity.id.id};${userIdentity.identity};${userIdentity.roles.joinToString(",")}"
 )
-
 
 fun Request.userIdentity(): UserIdentity? {
     val userIdentityStr = this.query(USER_IDENTITY_QUERY_PARAM) ?: return null

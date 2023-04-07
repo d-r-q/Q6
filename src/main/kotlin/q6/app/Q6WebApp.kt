@@ -29,7 +29,7 @@ class Q6AppHttp4kPort(
 
     private val webAppSubmodules = listOf(anonymousAppModule, q6AppModule)
 
-    private val authModule = Q6AuthModule(templatesModule, q6Core)
+    private val authModule = Q6AuthModule(templatesModule, q6Core.auth.authService::exchange)
 
     val app = authModule.filters.reduce { l, r -> l.then(r) }
         .then(routes(*(webAppSubmodules.flatMap { it.routes }).toTypedArray()))

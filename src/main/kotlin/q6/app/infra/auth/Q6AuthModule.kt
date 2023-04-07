@@ -3,15 +3,15 @@ package q6.app.infra.auth
 import org.http4k.core.Response
 import org.http4k.core.Status
 import org.http4k.template.renderToResponse
-import q6.app.Q6Core
 import q6.core.users.api.Role
+import q6.core.users.api.UserIdentity
 import q6.infra.http4k.TemplatesModule
 import q6.platform.http4k.StaticPage
 import q6.platform.http4k.location
 
 class Q6AuthModule(
     templatesModule: TemplatesModule,
-    q6Core: Q6Core
+    exchange: (String) -> UserIdentity?
 ) {
 
     private val authRules = PathPatternAuthorizationRules(
@@ -32,7 +32,7 @@ class Q6AuthModule(
 
 
     val filters = listOf(
-        CookieAuthenticator(q6Core.auth.authService),
+        CookieAuthenticator(exchange),
         authorizer
     )
 
