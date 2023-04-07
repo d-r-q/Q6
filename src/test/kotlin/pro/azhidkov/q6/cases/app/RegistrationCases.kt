@@ -6,10 +6,15 @@ import org.http4k.core.Request
 import org.http4k.core.body.form
 import org.jsoup.Jsoup
 import org.junit.jupiter.api.Test
+import org.slf4j.LoggerFactory
+import pro.azhidkov.q6.infra.q6Core
 import pro.azhidkov.q6.infra.q6Http4kApp
+import q6.core.users.api.RegisterUserRequest
 import kotlin.test.assertEquals
 
 class RegistrationCases {
+
+    private val log = LoggerFactory.getLogger(javaClass)
 
     @Test
     fun `Unauthorized user should have access to registration page`() {
@@ -54,11 +59,7 @@ class RegistrationCases {
         // Given
         val email = "newUser@ya.ru"
         val pass = "password"
-        val postRegisterUserRequest = Request(Method.POST, "/register")
-            .contentType("application/x-www-form-urlencoded")
-            .form("email", email)
-            .form("password", pass)
-            .form("name", "Irrelevant")
+        val postRegisterUserRequest = registerUserRequest(email, pass)
 
         // When
         val registerResponse = q6Http4kApp(postRegisterUserRequest)
@@ -78,6 +79,39 @@ class RegistrationCases {
         assertEquals("/app/main", loginResponse.header("Location"))
     }
 
+    @Test
+    fun `When registration form with registered email submitted, then fragment with error message should be returned`() {
+        // Given
+        val theEmail = "test@ya.ru"
+        val password = "password"
+        val name = "name"
+        q6Core.users.usersService.registerUser(RegisterUserRequest(theEmail, password, name))
+        val reregisterRequest = registerUserRequest(theEmail, password, name)
+
+        // When
+        val reregisterResponse = q6Http4kApp(reregisterRequest)
+        log.debug("Response: {}", reregisterResponse)
+
+        // Then
+        assertEquals(200, reregisterResponse.status.code)
+        Assertions.assertThatSpec(Jsoup.parse(reregisterResponse.bodyString())) {
+            node("input#emailInput.is-invalid") { exists() }
+            node("input#nameInput") { attribute("value") { hasText(name) } }
+            node("input#emailInput") { attribute("value") { hasText(theEmail) } }
+            node("input#passwordInput") { attribute("value") { hasText(password) } }
+        }
+    }
+
+}
+
+
+private fun registerUserRequest(email: String, pass: String = "Irrelevant", name: String = "Irrelevant"): Request {
+    val postRegisterUserRequest = Request(Method.POST, "/register")
+        .contentType("application/x-www-form-urlencoded")
+        .form("email", email)
+        .form("password", pass)
+        .form("name", name)
+    return postRegisterUserRequest
 }
 
 fun Request.contentType(contentType: String): Request = this.header("Content-Type", contentType)

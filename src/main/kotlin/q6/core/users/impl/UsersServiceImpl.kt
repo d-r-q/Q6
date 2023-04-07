@@ -1,11 +1,14 @@
 package q6.core.users.impl
 
+import org.jetbrains.exposed.dao.id.EntityID
 import org.jetbrains.exposed.dao.id.LongIdTable
 import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.transactions.transaction
 import q6.core.users.api.*
 import q6.platform.auth.PasswordEncoder
 import q6.platform.exposed.enumArray
+import q6.platform.exposed.isDuplicatedUniqueKey
+import q6.platform.kotlin.ifFailure
 import q6.platform.rmq.RabbitMqClient
 
 class UsersServiceImpl(
@@ -24,9 +27,10 @@ class UsersServiceImpl(
             registerUserRequest.copy(password = PasswordEncoder.encode(registerUserRequest.password))
         )
 
-        rmqClient.send(USER_REGISTERED_EVENTS_QUEUE, UserRegisteredEvent(inserted.value.toString()))
+        val userId = UserId(inserted.value)
+        rmqClient.send(USER_REGISTERED_EVENTS_QUEUE, UserRegisteredEvent(userId.id.toString()))
 
-        UserId(inserted.value)
+        userId
     }
 
     override fun findById(userId: UserId): User? = transaction(db) {
@@ -48,12 +52,22 @@ private object Users : LongIdTable("users") {
 
 private object Repo {
 
-    fun addUser(registerUserRequest: RegisterUserRequest) = Users.insert {
-        it[email] = registerUserRequest.email
-        it[password] = registerUserRequest.password
-        it[name] = registerUserRequest.name
-        it[roles] = arrayOf(Role.ROLE_USER)
-    }[Users.id]
+    fun addUser(registerUserRequest: RegisterUserRequest): EntityID<Long> {
+        val res = Result.runCatching {
+            Users.insert {
+                it[email] = registerUserRequest.email
+                it[password] = registerUserRequest.password
+                it[name] = registerUserRequest.name
+                it[roles] = arrayOf(Role.ROLE_USER)
+            }[Users.id]
+        }
+        res.ifFailure(::isDuplicatedUniqueKey) {
+            throw DuplicatedEmail(registerUserRequest.email, it)
+        }
+
+        return res.getOrThrow()
+    }
+
 
     fun findByEmail(email: String): User? =
         Users.select { Users.email eq email }

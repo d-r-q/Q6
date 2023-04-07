@@ -20,42 +20,51 @@
     <section class="vh-100" style="background-color: #eee;">
         <div class="container h-100">
             <div class="row d-flex justify-content-center align-items-center h-100">
-                <div class="col-lg-12 col-xl-11">
+                <div class="col-lg-12 col-xl-8">
                     <div class="card text-black">
                         <div class="card-body p-md-5">
                             <div class="row justify-content-center">
-                                <div class="col-md-10 col-lg-6 col-xl-5 order-2 order-lg-1">
 
-                                    <p class="text-center h1 fw-bold mb-5 mx-1 mx-md-4 mt-4">Q6 - Регистрация</p>
+                                <p class="text-center h1 fw-bold mb-5 mx-1 mx-md-4 mt-4">Q6 - Регистрация</p>
 
-                                    <form class="mx-1 mx-md-4" hx-post="/register" id="registerForm">
+                                <div class="col-md-6 col-lg-2 col-xl-6 order-2 order-lg-1">
+
+                                    <form class="mx-1 mx-md-4 needs-validation" hx-post="/register" id="registerForm"
+                                          th:object="${model.request}">
 
                                         <div class="d-flex flex-row align-items-center mb-4">
                                             <i class="fas fa-user fa-lg me-3 fa-fw"></i>
                                             <div class="form-outline flex-fill mb-0">
                                                 <input aria-label="Имя" class="form-control" id="nameInput" name="name"
-                                                       placeholder="Имя" required type="text"/>
+                                                       placeholder="Имя" required th:value="${model.request.name}"
+                                                       type="text"
+                                                />
                                             </div>
                                         </div>
 
-                                        <div class="d-flex flex-row align-items-center mb-4">
+                                        <div class="d-flex flex-row align-items-center mb-4 ">
                                             <i class="fas fa-envelope fa-lg me-3 fa-fw"></i>
                                             <div class="form-outline flex-fill mb-0">
-                                                <input type="email" name="email" id="form3Example3c" class="form-control" placeholder="Email" aria-label="Email" required/>
+                                                <input aria-label="Email" class="form-control" id="emailInput"
+                                                       name="email" placeholder="Email" required
+                                                       th:classappend="${model.duplicatedEmail} ? 'is-invalid' : ''"
+                                                       th:value="${model.request.email}"
+                                                       type="email"
+                                                />
+                                                <div class="invalid-feedback">
+                                                    Данный Email уже зарегистрирован
+                                                </div>
                                             </div>
                                         </div>
 
                                         <div class="d-flex flex-row align-items-center mb-4">
                                             <i class="fas fa-lock fa-lg me-3 fa-fw"></i>
                                             <div class="form-outline flex-fill mb-0">
-                                                <input type="password" name="password" id="form3Example4c" class="form-control" placeholder="Пароль" aria-label="Пароль" required/>
-                                            </div>
-                                        </div>
-
-                                        <div class="d-flex flex-row align-items-center mb-4">
-                                            <i class="fas fa-key fa-lg me-3 fa-fw"></i>
-                                            <div class="form-outline flex-fill mb-0">
-                                                <input type="password" name="passwordConfirm" id="form3Example4cd" class="form-control" placeholder="Повтор пароля" aria-label="Повтор пароля" required/>
+                                                <input aria-label="Пароль" class="form-control" id="passwordInput"
+                                                       name="password" placeholder="Пароль" required
+                                                       th:value="${model.request.password}"
+                                                       type="password"
+                                                />
                                             </div>
                                         </div>
 

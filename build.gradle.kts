@@ -28,9 +28,9 @@ dependencies {
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.14.2")
 
     testImplementation(kotlin("test"))
-    testImplementation("org.testcontainers:postgresql:1.17.4")
+    testImplementation("org.testcontainers:postgresql:1.17.6")
     testImplementation("org.assertj:assertj-core:3.24.2")
-    testImplementation("org.jsoup:jsoup:1.15.3")
+    testImplementation("org.jsoup:jsoup:1.15.4")
     testImplementation("io.github.ulfs:assertj-jsoup:0.1.4")
 }
 

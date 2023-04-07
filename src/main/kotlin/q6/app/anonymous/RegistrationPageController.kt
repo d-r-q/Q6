@@ -10,15 +10,17 @@ import org.http4k.lens.webForm
 import org.http4k.routing.bind
 import org.http4k.routing.routes
 import org.http4k.template.TemplateRenderer
+import q6.core.users.api.DuplicatedEmail
 import q6.core.users.api.RegisterUserRequest
 import q6.core.users.api.UsersService
 import q6.platform.http4k.SameFileNameViewModel
+import q6.platform.kotlin.throwIt
 import q6.platform.web.PageController
 
 
 class RegistrationPageController(
-    renderer: TemplateRenderer,
-    usersService: UsersService
+    private val renderer: TemplateRenderer,
+    private val usersService: UsersService
 ) : PageController {
 
     override val routes = routes(
@@ -32,19 +34,33 @@ class RegistrationPageController(
             val registerFrom = Body.webForm(Validator.Strict, email, password, name).toLens().extract(req)
             val registerUserRequest =
                 RegisterUserRequest(email(registerFrom), password(registerFrom), name(registerFrom))
-            usersService.registerUser(registerUserRequest)
-            Response(OK)
-                .header("HX-Redirect", "successful-registration")
+
+            registerUser(registerUserRequest)
         },
         "/successful-registration" bind Method.GET to {
             Response(OK).body(renderer(SuccessfulRegistrationPage))
         }
     )
 
+    private fun registerUser(registerUserRequest: RegisterUserRequest): Response {
+        val res = Result.runCatching { usersService.registerUser(registerUserRequest) }
+        return when {
+            res.isSuccess -> Response(OK)
+                .header("HX-Redirect", "successful-registration")
+
+            res.exceptionOrNull() is DuplicatedEmail -> Response(OK)
+                .body(renderer(RegistrationPage(registerUserRequest, true, "form")))
+
+            else -> res.throwIt()
+        }
+    }
+
 }
 
 data class RegistrationPage(
-    val registerUserRequest: RegisterUserRequest = RegisterUserRequest("", "", "")
+    val request: RegisterUserRequest = RegisterUserRequest("", "", ""),
+    val duplicatedEmail: Boolean = false,
+    override val selector: String? = null
 ) : SameFileNameViewModel
 
 object SuccessfulRegistrationPage : SameFileNameViewModel
