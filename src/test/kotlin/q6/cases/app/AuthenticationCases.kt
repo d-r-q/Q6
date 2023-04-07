@@ -1,4 +1,4 @@
-package pro.azhidkov.q6.cases.app
+package q6.cases.app
 
 import io.github.ulfs.assertj.jsoup.Assertions
 import org.http4k.core.Method
@@ -7,11 +7,11 @@ import org.http4k.core.Response
 import org.jsoup.Jsoup
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
-import pro.azhidkov.q6.infra.cleanDb
-import pro.azhidkov.q6.infra.q6Core
-import pro.azhidkov.q6.infra.q6Http4kApp
-import pro.azhidkov.q6.infra.q6Infra
 import q6.core.users.api.RegisterUserRequest
+import q6.infra.cleanDb
+import q6.infra.q6Core
+import q6.infra.q6Http4kApp
+import q6.infra.q6Infra
 import kotlin.test.assertEquals
 
 const val asergeevLogin = "asergeev@ya.ru"

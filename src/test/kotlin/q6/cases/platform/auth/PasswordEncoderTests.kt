@@ -1,4 +1,4 @@
-package pro.azhidkov.q6.cases.platform.auth
+package q6.cases.platform.auth
 
 import org.hamcrest.CoreMatchers.equalTo
 import org.hamcrest.MatcherAssert.assertThat

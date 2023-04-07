@@ -1,4 +1,4 @@
-package pro.azhidkov.q6.cases.app
+package q6.cases.app
 
 import org.http4k.core.HttpHandler
 import org.http4k.core.Method

@@ -1,4 +1,4 @@
-package pro.azhidkov.q6.cases.app
+package q6.cases.app
 
 import io.github.ulfs.assertj.jsoup.Assertions
 import org.http4k.core.Method
@@ -7,9 +7,9 @@ import org.http4k.core.body.form
 import org.jsoup.Jsoup
 import org.junit.jupiter.api.Test
 import org.slf4j.LoggerFactory
-import pro.azhidkov.q6.infra.q6Core
-import pro.azhidkov.q6.infra.q6Http4kApp
 import q6.core.users.api.RegisterUserRequest
+import q6.infra.q6Core
+import q6.infra.q6Http4kApp
 import kotlin.test.assertEquals
 
 class RegistrationCases {

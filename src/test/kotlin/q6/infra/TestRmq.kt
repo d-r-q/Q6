@@ -1,4 +1,4 @@
-package pro.azhidkov.q6.infra
+package q6.infra
 
 import org.testcontainers.containers.GenericContainer
 import org.testcontainers.containers.wait.strategy.HttpWaitStrategy

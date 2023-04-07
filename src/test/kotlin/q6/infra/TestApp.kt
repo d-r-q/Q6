@@ -1,4 +1,4 @@
-package pro.azhidkov.q6.infra
+package q6.infra
 
 import q6.app.Q6AppHttp4kPort
 import q6.app.Q6Core

@@ -1,4 +1,4 @@
-package pro.azhidkov.q6.cases.core.users
+package q6.cases.core.users
 
 import org.assertj.core.api.Assertions.assertThat
 import org.hamcrest.CoreMatchers.*
@@ -6,13 +6,13 @@ import org.hamcrest.MatcherAssert.assertThat
 import org.junit.Assume.assumeNotNull
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
-import pro.azhidkov.q6.infra.cleanDb
-import pro.azhidkov.q6.infra.q6Core
-import pro.azhidkov.q6.infra.q6Infra
 import q6.core.users.api.RegisterUserRequest
 import q6.core.users.api.Role
 import q6.core.users.api.USER_REGISTERED_EVENTS_QUEUE
 import q6.core.users.api.UserRegisteredEvent
+import q6.infra.cleanDb
+import q6.infra.q6Core
+import q6.infra.q6Infra
 import java.util.concurrent.CompletableFuture
 import kotlin.test.assertNotNull
 

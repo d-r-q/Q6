@@ -14,10 +14,6 @@
         <appender-ref ref="CONSOLE"/>
     </logger>
 
-    <logger name="pro.azhidkov.q6" level="debug" additivity="false">
-        <appender-ref ref="CONSOLE"/>
-    </logger>
-
     <logger name="org.http4k" level="trace" additivity="false">
         <appender-ref ref="CONSOLE"/>
     </logger>
