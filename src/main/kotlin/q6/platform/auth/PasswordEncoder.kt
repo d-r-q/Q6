@@ -9,7 +9,7 @@ object PasswordEncoder {
     private val verifyer = BCrypt.verifyer()
 
     fun encode(pass: String): String {
-        return bcrypt.hashToString(12, pass.toCharArray())
+        return bcrypt.hashToString(10, pass.toCharArray())
     }
 
     fun verify(pass: String, bcryptHash: String) =
