@@ -30,6 +30,7 @@
                                 <div class="col-md-6 col-lg-2 col-xl-6 order-2 order-lg-1">
 
                                     <form class="mx-1 mx-md-4 needs-validation" hx-post="/register" id="registerForm"
+                                          hx-swap="outerHTML" hx-target="#registerForm"
                                           th:object="${model.request}">
 
                                         <div class="d-flex flex-row align-items-center mb-4">
