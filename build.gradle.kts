@@ -43,5 +43,5 @@ kotlin {
 }
 
 application {
-    mainClass.set("pro.azhidkov.q6.app.Q6AppKt")
+    mainClass.set("q6.app.Q6WebAppKt")
 }
