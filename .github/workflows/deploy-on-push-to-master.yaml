@@ -83,6 +83,7 @@ jobs:
       - name: Build and push
         uses: docker/build-push-action@v4
         with:
+          file: deploy/q6/Dockerfile
           context: .
           push: true
           tags: ghcr.io/d-r-q/q6:latest
